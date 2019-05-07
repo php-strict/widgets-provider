@@ -28,7 +28,7 @@ for detail description and examples.
 Install with [Composer](http://getcomposer.org):
 
 ```bash
-composer require php-strict/widgets-consumer
+composer require php-strict/widgets-provider
 ```
 
 [ico-license]: https://img.shields.io/badge/license-GPL-brightgreen.svg?style=flat-square
