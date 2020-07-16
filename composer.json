@@ -15,9 +15,17 @@
     "require": {
         "php": "^7.1"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^9",
+        "php-strict/widgets-consumer": "dev-master",
+        "php-strict/widgets-producer": "dev-master"
+    },
     "autoload": {
         "psr-4": {
             "PhpStrict\\WidgetsProvider\\": "src/"
-        }
+        },
+        "classmap": [
+            "src/"
+        ]
     }
 }
