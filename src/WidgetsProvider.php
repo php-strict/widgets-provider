@@ -48,7 +48,7 @@ abstract class WidgetsProvider implements WidgetsProviderInterface
             $consumer->getWidgetsPlaces()
         );
         
-        $consumer->setWidgets($this->widgets);
+        $consumer->setWidgets($this->widgets ?? []);
     }
     
     /**
