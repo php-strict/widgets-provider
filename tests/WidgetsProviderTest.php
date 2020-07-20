@@ -15,7 +15,19 @@ class WidgetsProviderTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->widgetsProvider = new class() extends WidgetsProvider {
+        $this->widgetsProvider = new class(
+            new ArrayStorage([
+                'page1' => [
+                    'place1' => [
+                        []
+                    ]
+                ]
+            ])
+        ) extends WidgetsProvider {
+            public function __construct(WidgetsDataStorageInterface $storage)
+            {
+                $this->storage = $storage;
+            }
             protected function produceWidget(array $widgetData): ProducedWidgetInterface
             {
                 return new class($widgetData) implements ProducedWidgetInterface {
@@ -28,23 +40,26 @@ class WidgetsProviderTest extends TestCase
                     
                     public function getTitle(): string
                     {
-                        return 'title';
+                        return 'title1';
                     }
                     
                     public function getContent(): string
                     {
-                        return 'content';
+                        return 'content1';
                     }
                 };
             }
         };
         
-        $this->widgetsConsumer = new class() implements WidgetsConsumerInterface {
+        $this->widgetsConsumer = new class(
+            'page1', 
+            ['place1']
+        ) implements WidgetsConsumerInterface {
             protected $scope = '';
             
             protected $places = [];
             
-            protected $widgets = [];
+            public $widgets = [];
             
             public function __construct(string $scope = '', array $places = [])
             {
@@ -74,6 +89,7 @@ class WidgetsProviderTest extends TestCase
             
             public function renderWidgets(string $place): void
             {
+                var_dump($this->widgets);
                 if (!array_key_exists($place, $this->widgets)) {
                     return;
                 }
@@ -87,6 +103,20 @@ class WidgetsProviderTest extends TestCase
     
     public function testSetWidgets()
     {
+        $this->widgetsProvider->setWidgets($this->widgetsConsumer);
         
+        // ob_end_clean();
+        // $this->widgetsConsumer->renderWidgets('place1');
+        // exit();
+        
+        $this->assertTrue(1 == count($this->widgetsConsumer->widgets));
+        $this->assertTrue(array_key_exists('place1', $this->widgetsConsumer->widgets));
+        $this->assertFalse(array_key_exists('place2', $this->widgetsConsumer->widgets));
+        $this->assertTrue(is_array($this->widgetsConsumer->widgets['place1']));
+        $this->assertTrue(1 == count($this->widgetsConsumer->widgets['place1']));
+        $this->assertTrue(is_object($this->widgetsConsumer->widgets['place1'][0]));
+        $this->assertTrue($this->widgetsConsumer->widgets['place1'][0] instanceof Widget);
+        $this->assertTrue('title1' == $this->widgetsConsumer->widgets['place1'][0]->getTitle());
+        $this->assertTrue('content1' == $this->widgetsConsumer->widgets['place1'][0]->getContent());
     }
 }
