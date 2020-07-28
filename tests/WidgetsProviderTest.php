@@ -119,4 +119,19 @@ class WidgetsProviderTest extends TestCase
         $this->assertTrue('title1' == $this->widgetsConsumer->widgets['place1'][0]->getTitle());
         $this->assertTrue('content1' == $this->widgetsConsumer->widgets['place1'][0]->getContent());
     }
+    
+    public function testGetScopeWidgets()
+    {
+        $widgets = $this->widgetsProvider->getScopeWidgets('page1', ['place1']);
+        $this->assertTrue(is_array($widgets));
+        $this->assertTrue(1 == count($widgets));
+        $this->assertTrue(array_key_exists('place1', $widgets));
+        $this->assertFalse(array_key_exists('place2', $widgets));
+        $this->assertTrue(is_array($widgets['place1']));
+        $this->assertTrue(1 == count($widgets['place1']));
+        $this->assertTrue(is_object($widgets['place1'][0]));
+        $this->assertTrue($widgets['place1'][0] instanceof Widget);
+        $this->assertTrue('title1' == $widgets['place1'][0]->getTitle());
+        $this->assertTrue('content1' == $widgets['place1'][0]->getContent());
+    }
 }
