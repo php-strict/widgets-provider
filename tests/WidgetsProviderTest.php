@@ -134,4 +134,19 @@ class WidgetsProviderTest extends TestCase
         $this->assertTrue('title1' == $widgets['place1'][0]->getTitle());
         $this->assertTrue('content1' == $widgets['place1'][0]->getContent());
     }
+    
+    public function testGetWidgets()
+    {
+        $widgets = $this->widgetsProvider->getWidgets('page0', 'place0');
+        $this->assertTrue(is_array($widgets));
+        $this->assertTrue(0 == count($widgets));
+        
+        $widgets = $this->widgetsProvider->getWidgets('page1', 'place1');
+        $this->assertTrue(is_array($widgets));
+        $this->assertTrue(1 == count($widgets));
+        $this->assertTrue(is_object($widgets[0]));
+        $this->assertTrue($widgets[0] instanceof Widget);
+        $this->assertTrue('title1' == $widgets[0]->getTitle());
+        $this->assertTrue('content1' == $widgets[0]->getContent());
+    }
 }
