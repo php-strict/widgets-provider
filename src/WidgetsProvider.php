@@ -81,6 +81,9 @@ abstract class WidgetsProvider implements WidgetsProviderInterface
     public function getWidgets(string $scope, string $place): array
     {
         $this->generateForPlace($scope, $place);
+        if (null === $this->widgets) {
+            return [];
+        }
         
         if (array_key_exists($place, $this->widgets)) {
             return $this->widgets[$place];
