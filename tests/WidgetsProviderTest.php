@@ -19,14 +19,21 @@ class WidgetsProviderTest extends TestCase
             new ArrayStorage([
                 'page1' => [
                     'place1' => [
-                        []
-                    ]
+                        ['data' => 'data for place 1']
+                    ],
+                    'place2' => [
+                        ['data' => 'data for place 2']
+                    ],
                 ]
             ])
         ) extends WidgetsProvider {
             public function __construct(WidgetsDataStorageInterface $storage)
             {
                 $this->storage = $storage;
+            }
+            public function flushWidgets(): void
+            {
+                $this->widgets = null;
             }
             protected function produceWidget(array $widgetData): ProducedWidgetInterface
             {
@@ -40,12 +47,12 @@ class WidgetsProviderTest extends TestCase
                     
                     public function getTitle(): string
                     {
-                        return 'title1';
+                        return 'title ' . $this->widgetData['data'];
                     }
                     
                     public function getContent(): string
                     {
-                        return 'content1';
+                        return 'content ' . $this->widgetData['data'];
                     }
                 };
             }
@@ -116,8 +123,8 @@ class WidgetsProviderTest extends TestCase
         $this->assertTrue(1 == count($this->widgetsConsumer->widgets['place1']));
         $this->assertTrue(is_object($this->widgetsConsumer->widgets['place1'][0]));
         $this->assertTrue($this->widgetsConsumer->widgets['place1'][0] instanceof Widget);
-        $this->assertTrue('title1' == $this->widgetsConsumer->widgets['place1'][0]->getTitle());
-        $this->assertTrue('content1' == $this->widgetsConsumer->widgets['place1'][0]->getContent());
+        $this->assertTrue('title data for place 1' == $this->widgetsConsumer->widgets['place1'][0]->getTitle());
+        $this->assertTrue('content data for place 1' == $this->widgetsConsumer->widgets['place1'][0]->getContent());
     }
     
     public function testGetScopeWidgets()
@@ -131,8 +138,42 @@ class WidgetsProviderTest extends TestCase
         $this->assertTrue(1 == count($widgets['place1']));
         $this->assertTrue(is_object($widgets['place1'][0]));
         $this->assertTrue($widgets['place1'][0] instanceof Widget);
-        $this->assertTrue('title1' == $widgets['place1'][0]->getTitle());
-        $this->assertTrue('content1' == $widgets['place1'][0]->getContent());
+        $this->assertTrue('title data for place 1' == $widgets['place1'][0]->getTitle());
+        $this->assertTrue('content data for place 1' == $widgets['place1'][0]->getContent());
+        
+        $this->widgetsProvider->flushWidgets();
+        
+        $widgets = $this->widgetsProvider->getScopeWidgets('page1', ['place2']);
+        $this->assertTrue(is_array($widgets));
+        $this->assertTrue(1 == count($widgets));
+        $this->assertTrue(array_key_exists('place2', $widgets));
+        $this->assertFalse(array_key_exists('place1', $widgets));
+        $this->assertTrue(is_array($widgets['place2']));
+        $this->assertTrue(1 == count($widgets['place2']));
+        $this->assertTrue(is_object($widgets['place2'][0]));
+        $this->assertTrue($widgets['place2'][0] instanceof Widget);
+        $this->assertTrue('title data for place 2' == $widgets['place2'][0]->getTitle());
+        $this->assertTrue('content data for place 2' == $widgets['place2'][0]->getContent());
+        
+        $this->widgetsProvider->flushWidgets();
+        
+        $widgets = $this->widgetsProvider->getScopeWidgets('page1');
+        $this->assertTrue(is_array($widgets));
+        $this->assertTrue(2 == count($widgets));
+        $this->assertTrue(array_key_exists('place1', $widgets));
+        $this->assertTrue(array_key_exists('place2', $widgets));
+        $this->assertTrue(is_array($widgets['place1']));
+        $this->assertTrue(is_array($widgets['place2']));
+        $this->assertTrue(1 == count($widgets['place1']));
+        $this->assertTrue(1 == count($widgets['place2']));
+        $this->assertTrue(is_object($widgets['place1'][0]));
+        $this->assertTrue(is_object($widgets['place2'][0]));
+        $this->assertTrue($widgets['place1'][0] instanceof Widget);
+        $this->assertTrue($widgets['place2'][0] instanceof Widget);
+        $this->assertTrue('title data for place 1' == $widgets['place1'][0]->getTitle());
+        $this->assertTrue('title data for place 2' == $widgets['place2'][0]->getTitle());
+        $this->assertTrue('content data for place 1' == $widgets['place1'][0]->getContent());
+        $this->assertTrue('content data for place 2' == $widgets['place2'][0]->getContent());
     }
     
     public function testGetWidgets()
@@ -146,7 +187,7 @@ class WidgetsProviderTest extends TestCase
         $this->assertTrue(1 == count($widgets));
         $this->assertTrue(is_object($widgets[0]));
         $this->assertTrue($widgets[0] instanceof Widget);
-        $this->assertTrue('title1' == $widgets[0]->getTitle());
-        $this->assertTrue('content1' == $widgets[0]->getContent());
+        $this->assertTrue('title data for place 1' == $widgets[0]->getTitle());
+        $this->assertTrue('content data for place 1' == $widgets[0]->getContent());
     }
 }
