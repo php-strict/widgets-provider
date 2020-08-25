@@ -6,6 +6,8 @@ php:
   - '7.2'
   - '7.3'
   - '7.4'
+install:
+  - if [[ $TRAVIS_PHP_VERSION > '7.1' || $TRAVIS_PHP_VERSION < '7.3' ]]; then wget -O ~/.phpenv/versions/$(phpenv version-name)/bin/phpunit https://phar.phpunit.de/phpunit-8.phar; fi
 before_script:
   - composer install
 script:
