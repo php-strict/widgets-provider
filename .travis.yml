@@ -14,6 +14,6 @@ before_script:
 script:
   - php -v
   - phpunit --version
-  - phpunit tests --coverage-text --whitelist src\WidgetsProvider.php
+  - phpunit tests --coverage-text --whitelist src/WidgetsProvider.php
 after_success:
   - bash <(curl -s https://codecov.io/bash)
