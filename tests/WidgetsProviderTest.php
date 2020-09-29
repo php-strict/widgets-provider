@@ -189,5 +189,9 @@ class WidgetsProviderTest extends TestCase
         $this->assertTrue($widgets[0] instanceof Widget);
         $this->assertTrue('title data for place 1' == $widgets[0]->getTitle());
         $this->assertTrue('content data for place 1' == $widgets[0]->getContent());
+
+        $widgets = $this->widgetsProvider->getWidgets('page1', 'place-not-exists');
+        $this->assertTrue(is_array($widgets));
+        $this->assertTrue(0 == count($widgets));
     }
 }
