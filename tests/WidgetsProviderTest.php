@@ -140,6 +140,8 @@ class WidgetsProviderTest extends TestCase
         $this->assertTrue($widgets['place1'][0] instanceof Widget);
         $this->assertTrue('title data for place 1' == $widgets['place1'][0]->getTitle());
         $this->assertTrue('content data for place 1' == $widgets['place1'][0]->getContent());
+        //to coverage generateForScope method
+        $widgets = $this->widgetsProvider->getScopeWidgets('page1', ['place1']);
         
         $this->widgetsProvider->flushWidgets();
         
