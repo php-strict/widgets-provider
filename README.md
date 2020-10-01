@@ -2,6 +2,7 @@
 
 [![Software License][ico-license]](LICENSE.txt)
 [![Build Status][ico-travis]][link-travis]
+[![codecov][ico-codecov]][link-codecov]
 [![Codacy Badge][ico-codacy]][link-codacy]
 
 Widgets Provider repository.
@@ -36,5 +37,7 @@ composer require php-strict/widgets-provider
 [ico-license]: https://img.shields.io/badge/license-GPL-brightgreen.svg?style=flat-square
 [ico-travis]: https://travis-ci.com/php-strict/widgets-provider.svg?branch=master
 [link-travis]: https://travis-ci.com/php-strict/widgets-provider
+[ico-codecov]: https://codecov.io/gh/php-strict/widgets-provider/branch/master/graph/badge.svg
+[link-codecov]: https://codecov.io/gh/php-strict/widgets-provider
 [ico-codacy]: https://api.codacy.com/project/badge/Grade/1ecddd641564460ea95e7dbd261438f1
 [link-codacy]: https://www.codacy.com/app/php-strict/widgets-provider?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=php-strict/widgets-provider&amp;utm_campaign=Badge_Grade
